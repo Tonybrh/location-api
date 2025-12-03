@@ -3,7 +3,7 @@ import { ILocationRepository } from '../../domain/repositories/location.reposito
 import { Location } from '../../domain/entities/location.entity';
 
 @Injectable()
-export class GetLocalByIdUseCase {
+export class GetLocationByIdUseCase {
   constructor(
     @Inject(ILocationRepository)
     private readonly localRepository: ILocationRepository,

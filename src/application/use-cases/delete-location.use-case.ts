@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ILocationRepository } from '../../domain/repositories/location.repository.interface';
 
 @Injectable()
-export class DeleteLocalUseCase {
+export class DeleteLocationUseCase {
   constructor(
     @Inject(ILocationRepository)
     private readonly localRepository: ILocationRepository,
