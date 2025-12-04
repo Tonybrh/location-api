@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ILocationRepository } from '../../../domain/repositories/location.repository.interface';
-import { Location } from '../../../domain/entities/location.entity';
-import { PrismaService } from '../prisma/prisma.service';
+import { ILocationRepository } from '../../domain/repositories/location.repository.interface';
+import { Location } from '../../domain/entities/location.entity';
+import { PrismaService } from '../services/prisma.service';
 
 @Injectable()
 export class PrismaLocationRepository implements ILocationRepository {

@@ -19,7 +19,9 @@ export class LocationResponseDto {
   @ApiProperty({ example: -43.210487 })
   longitude: number;
 
-  @ApiProperty({ example: 'https://example.com/image.jpg' })
+  @ApiProperty({
+    example: 'https://bucket.s3.amazonaws.com/locations/image.jpg',
+  })
   imageUrl: string;
 
   constructor(location: Location) {

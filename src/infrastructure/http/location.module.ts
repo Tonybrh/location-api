@@ -1,8 +1,8 @@
 // src/infrastructure/http/location.module.ts
 import { Module } from '@nestjs/common';
 import { LocationController } from './controllers/location.controller';
-import { PrismaService } from '../database/prisma/prisma.service';
-import { PrismaLocationRepository } from '../database/repositories/prisma-location.repository';
+import { PrismaService } from '../services/prisma.service';
+import { PrismaLocationRepository } from '../repositories/prisma-location.repository';
 import { CreateLocationUseCase } from '../../application/use-cases/create-location.use-case';
 import { ListLocationsUseCase } from '../../application/use-cases/list-locations.use-case';
 import { GetLocationByIdUseCase } from '../../application/use-cases/get-location-by-id.use-case';

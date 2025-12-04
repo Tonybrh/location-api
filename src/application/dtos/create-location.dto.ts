@@ -5,9 +5,9 @@ import {
   Min,
   Max,
   MinLength,
-  IsUrl,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
 export class CreateLocationDto {
   @ApiProperty({ example: 'Cristo Redentor', description: 'Nome do local' })
@@ -25,23 +25,23 @@ export class CreateLocationDto {
   description: string;
 
   @ApiProperty({ example: -22.951916, description: 'Latitude do local' })
+  @Type(() => Number)
   @IsNumber({}, { message: 'Latitude deve ser um número' })
   @Min(-90, { message: 'Latitude mínima é -90' })
   @Max(90, { message: 'Latitude máxima é 90' })
   latitude: number;
 
   @ApiProperty({ example: -43.210487, description: 'Longitude do local' })
+  @Type(() => Number)
   @IsNumber({}, { message: 'Longitude deve ser um número' })
   @Min(-180, { message: 'Longitude mínima é -180' })
   @Max(180, { message: 'Longitude máxima é 180' })
   longitude: number;
 
   @ApiProperty({
-    example: 'https://example.com/image.jpg',
-    description: 'URL da imagem do local',
+    type: 'string',
+    format: 'binary',
+    description: 'Arquivo de imagem do local',
   })
-  @IsString()
-  @IsNotEmpty({ message: 'URL da imagem é obrigatória' })
-  @IsUrl({}, { message: 'URL da imagem inválida' })
-  imageUrl: string;
+  image: Express.Multer.File;
 }

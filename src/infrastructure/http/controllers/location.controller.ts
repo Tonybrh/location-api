@@ -9,8 +9,20 @@ import {
   Param,
   HttpCode,
   HttpStatus,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiConsumes,
+} from '@nestjs/swagger';
 import { CreateLocationDto } from '../../../application/dtos/create-location.dto';
 import { UpdateLocationDto } from '../../../application/dtos/update-location.dto';
 import { LocationResponseDto } from '../../../application/dtos/location-response.dto';
@@ -33,15 +45,31 @@ export class LocationController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Criar um novo local' })
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Criar um novo local com upload de imagem' })
   @ApiResponse({
     status: 201,
     description: 'Local criado com sucesso',
     type: LocationResponseDto,
   })
-  @ApiResponse({ status: 400, description: 'Dados inválidos' })
-  async create(@Body() dto: CreateLocationDto): Promise<LocationResponseDto> {
-    const location = await this.createLocationUseCase.execute(dto);
+  @ApiResponse({
+    status: 400,
+    description: 'Dados inválidos ou arquivo inválido',
+  })
+  async create(
+    @Body() dto: CreateLocationDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }),
+          new FileTypeValidator({ fileType: /image\/(jpeg|jpg|png|webp)/ }),
+        ],
+      }),
+    )
+    image: Express.Multer.File,
+  ): Promise<LocationResponseDto> {
+    const location = await this.createLocationUseCase.execute(dto, image);
     return LocationResponseDto.fromEntity(location);
   }
 
@@ -72,7 +100,9 @@ export class LocationController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Atualizar um local' })
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Atualizar um local (com ou sem nova imagem)' })
   @ApiParam({ name: 'id', description: 'ID do local' })
   @ApiResponse({
     status: 200,
@@ -84,8 +114,18 @@ export class LocationController {
   async update(
     @Param('id') id: string,
     @Body() dto: UpdateLocationDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }), // 5MB
+          new FileTypeValidator({ fileType: /image\/(jpeg|jpg|png|webp)/ }),
+        ],
+        fileIsRequired: false,
+      }),
+    )
+    image?: Express.Multer.File,
   ): Promise<LocationResponseDto> {
-    const location = await this.updateLocationUseCase.execute(id, dto);
+    const location = await this.updateLocationUseCase.execute(id, dto, image);
     return LocationResponseDto.fromEntity(location);
   }
 
