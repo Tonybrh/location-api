@@ -9,6 +9,7 @@ import { ListLocationsUseCase } from './application/use-cases/list-locations.use
 import { GetLocationByIdUseCase } from './application/use-cases/get-location-by-id.use-case';
 import { UpdateLocationUseCase } from './application/use-cases/update-location.use-case';
 import { DeleteLocationUseCase } from './application/use-cases/delete-location.use-case';
+import { LOCATION_REPOSITORY } from './shared/tokens/injection-tokens';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { DeleteLocationUseCase } from './application/use-cases/delete-location.u
   providers: [
     PrismaService,
     {
-      provide: 'ILocationRepository',
+      provide: LOCATION_REPOSITORY,
       useClass: PrismaLocationRepository,
     },
     CreateLocationUseCase,
