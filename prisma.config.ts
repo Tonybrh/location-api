@@ -1,5 +1,10 @@
 import 'dotenv/config';
 import { defineConfig, env } from 'prisma/config';
+import { config } from 'dotenv';
+
+if (process.env.NODE_ENV !== 'production') {
+  config();
+}
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
