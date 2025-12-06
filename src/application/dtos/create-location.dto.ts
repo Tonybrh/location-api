@@ -37,11 +37,4 @@ export class CreateLocationDto {
   @Min(-180, { message: 'Longitude mínima é -180' })
   @Max(180, { message: 'Longitude máxima é 180' })
   longitude: number;
-
-  @ApiProperty({
-    type: 'string',
-    format: 'binary',
-    description: 'Arquivo de imagem do local',
-  })
-  image: Express.Multer.File;
 }

@@ -1,4 +1,3 @@
-// src/infrastructure/storage/s3-upload.service.ts
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -52,7 +51,6 @@ export class S3UploadService {
       Key: fileName,
       Body: file.buffer,
       ContentType: file.mimetype,
-      ACL: 'public-read',
     });
 
     try {
@@ -68,6 +66,7 @@ export class S3UploadService {
 
   async deleteFile(fileUrl: string): Promise<void> {
     try {
+      // Extrai o key (caminho do arquivo) da URL
       const key = fileUrl.split('.com/')[1];
 
       if (!key) return;
