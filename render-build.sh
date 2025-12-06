@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
+# render-build.sh
 
+# Exit on error
 set -o errexit
 
+echo "📦 Installing dependencies..."
 npm install
 
-npm run prisma:generate
+echo "🔄 Generating Prisma Client..."
+npx prisma generate
 
+echo "🏗️  Building application..."
 npm run build
+
+echo "✅ Build completed successfully!"
